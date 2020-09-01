@@ -1,7 +1,7 @@
   type ide = string;;
 
   type exp = Eint of int | Ebool of bool | Den of ide | Prod of exp * exp | Sum of exp * exp | Diff of exp * exp |
-    Eq of exp * exp | Negative of exp | IsZero of exp | Or of exp * exp | And of exp * exp | Not of exp |
+    Eq of exp * exp | Minus of exp | IsZero of exp | Or of exp * exp | And of exp * exp | Not of exp |
     Ifthenelse of exp * exp * exp | Let of ide * exp * exp | Fun of ide * exp | FunCall of exp * exp list |
     Letrec of ide * exp * exp
     | Dictionary of (ide * exp) list (*Dizionario*)
@@ -64,7 +64,7 @@
           | _ -> failwith("error in applying function"))
     else failwith("Type error");;
 
-  let negative x =
+  let minus x =
     if (typecheck "int" x)
     then (match x with
           | Int(n) -> Int(-n)
@@ -78,14 +78,14 @@
           | _ -> failwith("error in applying function"))
     else failwith("Type error");;
 
-  let orExp x y =
+  let vel x y =
     if (typecheck "bool" x) && (typecheck "bool" y)
     then (match (x,y) with
           | (Bool(b),Bool(e)) -> (Bool(b||e))
           | _ -> failwith("error in applying function"))
     else failwith("Type error");;
 
-  let andExp x y =
+  let et x y =
     if (typecheck "bool" x) && (typecheck "bool" y)
     then (match (x,y) with
           | (Bool(b),Bool(e)) -> Bool(b&&e)
@@ -110,9 +110,9 @@
       | Prod(a, b) -> prod (eval a r) (eval b r) 
       | Sum(a, b) -> sum (eval a r) (eval b r) 
       | Diff(a, b) -> diff (eval a r) (eval b r) 
-      | Negative a -> negative (eval a r)
-      | And(a, b) -> andExp (eval a r) (eval b r)
-      | Or(a, b) -> orExp (eval a r) (eval b r) 
+      | Minus a -> minus (eval a r)
+      | And(a, b) -> et (eval a r) (eval b r)
+      | Or(a, b) -> vel (eval a r) (eval b r) 
       | Not a -> non (eval a r) 
       | Ifthenelse(a, b, c) -> let g = (eval a r) in
                                 if (typecheck "bool" g) then (if g = Bool(true) then (eval b r) else (eval c r))
